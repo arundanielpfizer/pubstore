@@ -1,0 +1,22 @@
+
+provider "aws" {
+  region = "us-east-1"
+    assume_role {
+        role_arn = "arn:aws:iam::119585557210:role/service-role/AmazonAppStreamServiceAccess"
+  }
+}
+
+resource "aws_appstream_image_builder" "arun" {
+  name                      = "arun-image-builder"
+  instance_type             = "stream.standard.large"
+  image_name                = "AppStream-WinServer2022-05-08-2024"
+  display_name              = "ArunImageBuilder"
+  description               = "AppStream Image Builder for Windows Server 2022"
+  vpc_config {
+    subnet_ids              = ["subnet-0685e095628640e85"]
+    security_group_ids      = ["sg-0f040d0a8e84a1cea"]
+  }
+  tags = {
+    Name = "arun-appstream-image-builder"
+  }
+}
