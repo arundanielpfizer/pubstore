@@ -1,5 +1,10 @@
 provider "aws" {
   region = "us-east-1" # Change this to your desired region
+
+    assume_role {
+    # The role ARN within Account B to AssumeRole into.
+    role_arn = "arn:aws:iam::${local.vpc_options.aws_account}:role/OrganizationAccountAccessRole"
+  }
 }
 
 resource "aws_appstream_image_builder" "example" {
