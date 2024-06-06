@@ -1,0 +1,45 @@
+provider "aws" {
+  region = "us-east-1" # Change this to your desired region
+}
+
+resource "aws_appstream_image_builder" "example" {
+  name                      = "my-image-builder"
+  instance_type             = "stream.standard.large"
+  image_name                = "AppStream-WinServer2022-05-08-2024"
+  display_name              = "MyImageBuilder"
+  description               = "AppStream Image Builder for Windows Server 2022"
+  iam_role_arn              = "arn:aws:iam::123456789012:role/YourIAMRole" # Replace with your IAM role ARN
+  vpc_config {
+    subnet_ids              = ["subnet-01195d087740215ca"]
+    security_group_ids      = ["sg-xxxxxxxx"] # Replace with your default security group ID
+  }
+  domain_join_info {
+    directory_name          = "example.com" # Replace with your directory name
+    organizational_unit_distinguished_name = "OU=ExampleOU,DC=example,DC=com" # Replace with your OU
+  }
+  tags = {
+    Name = "my-appstream-image-builder"
+  }
+}
+
+resource "aws_security_group" "default" {
+  vpc_id = "vpc-0a05cf20435f2fbc5"
+
+  ingress {
+    from_port   = 3389
+    to_port     = 3389
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "default"
+  }
+}
